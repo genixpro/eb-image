@@ -17,6 +17,7 @@
  */
 
 const EBImageInterpretation = require('./server/EBImageInterpretation');
+const EBNeuralNetworkImageComponent = require('./server/EBNeuralNetworkImageComponent');
 
 /*
  * Plugins must define a series of standard methods.
@@ -26,6 +27,7 @@ module.exports = {
     "name": "image",
     "folder": __dirname,
     "dataSources": {},
-    "interpretations": {'image': EBImageInterpretation}
+    "interpretations": {'image': EBImageInterpretation},
+    "neuralNetworkComponents": {'image': EBNeuralNetworkImageComponent}
 };
 
