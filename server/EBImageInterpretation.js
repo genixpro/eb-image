@@ -26,6 +26,7 @@ const
     EBNumberHistogram = require('../../../shared/models/EBNumberHistogram'),
     jimp = require('jimp'),
     sharp = require('sharp'),
+    Promise = require('bluebird'),
     underscore = require('underscore');
 
 /**
@@ -55,6 +56,19 @@ class EBImageInterpretation extends EBInterpretationBase
     getUpstreamInterpretations()
     {
         return ['binary'];
+    }
+
+
+
+
+    /**
+     * This method returns the raw javascript type of value that this interpretation applies to.
+     *
+     * @return {string} Can be one of: 'object', 'array', 'number', 'string', 'boolean', 'binary'
+     */
+    getJavascriptType()
+    {
+        return 'binary';
     }
 
 
@@ -112,22 +126,6 @@ class EBImageInterpretation extends EBInterpretationBase
 
 
 
-
-    /**
-     * This method should return information about fields that need to be graphed on
-     * the frontend for this interpretation.
-     *
-     * @param {*} value The value to be transformed
-     * @return {Promise} A promise that resolves to an array of statistics
-     */
-    listStatistics(value)
-    {
-        return Promise.resolve([]);
-    }
-
-
-
-
     /**
      * This method should transform an example into a value that is small enough to be
      * stored with the schema and shown on the frontend. Information can be destroyed
@@ -138,14 +136,16 @@ class EBImageInterpretation extends EBInterpretationBase
      */
     transformExample(value)
     {
-        return jimp.read(value)
-            .then(function (imageObj)
+        return jimp.read(value).then((imageObj) =>
+        {
+            return Promise.fromCallback((next) =>
             {
-                return Promise.fromCallback(function(next)
-                {
-                    imageObj.contain(100,100).getBuffer(jimp.MIME_JPEG, next);
-                });
+                imageObj.contain(100,100).getBuffer(jimp.MIME_JPEG, next);
+            }).then((buffer) =>
+            {
+                return buffer.toString('base64');
             });
+        });
     }
 
 
@@ -180,16 +180,12 @@ class EBImageInterpretation extends EBInterpretationBase
                 });
             }
 
-            getFieldMetadata()
+            getFieldStatistics()
             {
-                const metadata = new EBFieldMetadata();
-
-                metadata.types.push('binary');
-
-                metadata.imageWidthHistogram = EBNumberHistogram.computeHistogram(this.widths);
-                metadata.imageHeightHistogram = EBNumberHistogram.computeHistogram(this.heights);
-
-                return metadata;
+                return {
+                    imageWidthHistogram: EBNumberHistogram.computeHistogram(this.widths),
+                    imageHeightHistogram: EBNumberHistogram.computeHistogram(this.heights)
+                };
             }
         })();
     }
@@ -200,7 +196,7 @@ class EBImageInterpretation extends EBInterpretationBase
      *
      * @return {jsonschema} A schema representing the metadata for this interpretation
      */
-    static metadataSchema()
+    static statisticsSchema()
     {
         return {
             "id": "EBFieldMetadata",

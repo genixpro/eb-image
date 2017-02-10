@@ -20,7 +20,7 @@
 
 const
     assert = require('assert'),
-    EBInterpretationBase = require('./../../../server/components/datasource/EBInterpretationBase'),
+    EBNeuralNetworkComponentBase = require('./../../../shared/components/architecture/EBNeuralNetworkComponentBase'),
     EBTorchModule = require('../../../shared/models/EBTorchModule'),
     EBTorchNode = require('../../../shared/models/EBTorchNode'),
     EBTensorSchema = require('../../../shared/models/EBTensorSchema'),
@@ -30,7 +30,7 @@ const
 /**
  * The neural network image component is used to process images.
  */
-class EBNeuralNetworkImageComponent extends EBInterpretationBase
+class EBNeuralNetworkImageComponent extends EBNeuralNetworkComponentBase
 {
     /**
      * Constructor

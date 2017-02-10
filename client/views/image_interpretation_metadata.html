@@ -1,10 +1,23 @@
 <div class="row">
     <div class="col-xs-6">
         <h3>Image Width</h3>
-        <eb-number-histogram ng-model="field.metadata.imageWidthHistogram" height="100"></eb-number-histogram>
+        <eb-number-histogram ng-model="field.metadata.statistics.imageWidthHistogram" height="100"></eb-number-histogram>
     </div>
     <div class="col-xs-6">
         <h3>Image Height</h3>
-        <eb-number-histogram ng-model="field.metadata.imageHeightHistogram" height="100"></eb-number-histogram>
+        <eb-number-histogram ng-model="field.metadata.statistics.imageHeightHistogram" height="100"></eb-number-histogram>
+    </div>
+</div>
+
+<!-- Show some examples -->
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Examples</h3>
+
+        <div class="schema-field-examples">
+            <div ng-repeat="example in field.metadata.examples.slice(0, 10)" class="schema-details-example-value">
+                <span><img src="data:image/png;base64, {{example}}"></span>
+            </div>
+        </div>
     </div>
 </div>
