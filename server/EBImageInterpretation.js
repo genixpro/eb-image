@@ -150,6 +150,56 @@ class EBImageInterpretation extends EBInterpretationBase
 
 
     /**
+     * This method should transform the given schema for input to the neural network.
+     *
+     * @param {EBSchema} schema The schema to be transformed
+     * @return {Promise} A promise that resolves to a new value.
+     */
+    transformSchemaForNeuralNetwork(schema)
+    {
+        return schema;
+    }
+
+
+    /**
+     * This method should prepare a given value for input into the neural network
+     *
+     * @param {*} value The value to be transformed
+     * @param {EBSchema} schema The schema for the value to be transformed
+     * @return {Promise} A promise that resolves to a new value.
+     */
+    transformValueForNeuralNetwork(value, schema)
+    {
+        return value.toString('base64');
+    }
+
+
+    /**
+     * This method should take output from the neural network and transform it back
+     *
+     * @param {*} value The value to be transformed
+     * @param {EBSchema} schema The schema for the value to be transformed
+     * @return {Promise} A promise that resolves to a new value
+     */
+    transformValueBackFromNeuralNetwork(value, schema)
+    {
+        return new Buffer(value, 'base64');
+    }
+
+
+    /**
+     * This method should generate the default configuration for the given schema
+     *
+     * @param {EBSchema} schema The schema for the value to be transformed
+     * @return {object} An object which follows the schema returned from configurationSchema
+     */
+    generateDefaultConfiguration(schema)
+    {
+        return {};
+    }
+
+
+    /**
      * This method should create a new field accumulator, a subclass of EBFieldAnalysisAccumulatorBase.
      *
      * This accumulator can be used to analyze a bunch of values through the lens of this interpretation,
