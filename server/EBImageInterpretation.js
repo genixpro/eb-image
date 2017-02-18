@@ -257,6 +257,37 @@ class EBImageInterpretation extends EBInterpretationBase
             }
         };
     }
+
+
+    /**
+     * This method should return a schema for the configuration for this interpretation
+     *
+     * @return {jsonschema} A schema representing the configuration for this interpretation
+     */
+    static configurationSchema()
+    {
+        return {
+            "id": "EBImageInterpretation.configurationSchema",
+            "type": "object",
+            "properties": {}
+
+        };
+    }
+
+
+    /**
+     * This method should return a schema for accumulating accuracy results from values in this interpretation
+     *
+     * @return {jsonschema} A schema representing whatever is needed to store results
+     */
+    static resultsSchema()
+    {
+        return {
+            "id": "EBImageInterpretation.resultsSchema",
+            "type": "object",
+            "properties": {}
+        };
+    }
 }
 
 module.exports = EBImageInterpretation;
