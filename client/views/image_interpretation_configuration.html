@@ -1,10 +1,29 @@
 
 <h3>Architecture Options</h3>
 
-<select class="form-control" ng-model="field.configuration.interpretation.mode">
-    <option value="classification">classification</option>
-    <option value="sequence">sequence</option>
-</select>
+
+<form method="get" class="form-horizontal">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">Data Augmentation<br/></label>
+        <div class="col-sm-10">
+            <div>
+                <label> <input type="checkbox" value="" ng-model="field.configuration.interpretation.rotateImage"> Randomly Rotate image</label>
+            </div>
+            <div>
+                <label> <input type="checkbox" value="" ng-model="field.configuration.interpretation.stretchImage"> Randomly Stretch Image</label>
+            </div>
+            <div>
+                <label> <input type="checkbox" value="" ng-model="field.configuration.interpretation.mirrorHorizontally"> Randomly Mirror Image Horizontally</label>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+
+
+
 
 
 <script type="text/ng-template" id="nodes_renderer.html">

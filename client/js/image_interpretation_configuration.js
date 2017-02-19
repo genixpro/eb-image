@@ -66,7 +66,7 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
             },
             {
                 "id": 2,
-                "title": "MAxPooling",
+                "title": "Max Pooling",
                 "layerType": "maxpooling"
             },
             {

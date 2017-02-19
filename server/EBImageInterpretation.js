@@ -20,6 +20,7 @@
 
 const
     fileType = require('file-type'),
+    fs = require('fs'),
     EBFieldAnalysisAccumulatorBase = require('./../../../server/components/datasource/EBFieldAnalysisAccumulatorBase'),
     EBFieldMetadata = require('../../../shared/models/EBFieldMetadata'),
     EBInterpretationBase = require('./../../../server/components/datasource/EBInterpretationBase'),
@@ -28,6 +29,8 @@ const
     sharp = require('sharp'),
     Promise = require('bluebird'),
     underscore = require('underscore');
+
+let imageN = 0;
 
 /**
  * The image interpretation applies when you have binary data containing some sort of image
@@ -170,7 +173,66 @@ class EBImageInterpretation extends EBInterpretationBase
      */
     transformValueForNeuralNetwork(value, schema)
     {
-        return value.toString('base64');
+        const configuration = schema.configuration.interpretation;
+        return jimp.read(value).then((imageObj) =>
+        {
+            let mirrorHorizontal = false;
+            if (configuration.mirrorHorizontally)
+            {
+                if (Math.random() > 0.5)
+                {
+                    mirrorHorizontal = true;
+                }
+            }
+            if (mirrorHorizontal)
+            {
+                imageObj.flip(true, false);
+            }
+
+            if (configuration.stretchImage)
+            {
+                // Determine the amount of horizontal scaling
+                const scalingFactor = 0.3;
+                const widthDiff = ((Math.random() * scalingFactor * 2) - scalingFactor) * 100;
+                const heightDiff = ((Math.random() * scalingFactor * 2) - scalingFactor) * 100;
+
+                const newWidth = 100 + widthDiff;
+                const newHeight = 100 + heightDiff;
+
+                const cropPointX = Math.max(0, Math.floor(Math.random() * widthDiff));
+                const cropPointY = Math.max(0, Math.floor(Math.random() * heightDiff));
+
+                imageObj.resize(newWidth, newHeight);
+                imageObj.crop(cropPointX, cropPointY, Math.min(newWidth, 100), Math.min(newHeight, 100) );
+                imageObj.contain(100, 100);
+            }
+
+            if (configuration.rotateImage)
+            {
+                const rotationFactor = 15;
+                const degrees = (Math.random() * rotationFactor * 2) - rotationFactor;
+                imageObj.rotate(degrees);
+                imageObj.resize(100, 100);
+            }
+
+            return Promise.fromCallback((next) =>
+            {
+                imageObj.getBuffer(jimp.MIME_JPEG, function(err, buffer)
+                {
+                    if (err)
+                    {
+                        return next(err);
+                    }
+
+                    imageN += 1;
+                    fs.writeFileSync(`/home/bradley/cars/car-${imageN}.jpg`, buffer);
+                    return next(null, buffer);
+                });
+            }).then((buffer) =>
+            {
+                return buffer.toString('base64');
+            });
+        });
     }
 
 
@@ -195,7 +257,11 @@ class EBImageInterpretation extends EBInterpretationBase
      */
     generateDefaultConfiguration(schema)
     {
-        return {};
+        return {
+            rotateImage: true,
+            stretchImage: true,
+            mirrorHorizontally: true
+        };
     }
 
 
@@ -269,8 +335,11 @@ class EBImageInterpretation extends EBInterpretationBase
         return {
             "id": "EBImageInterpretation.configurationSchema",
             "type": "object",
-            "properties": {}
-
+            "properties": {
+                rotateImage: {"type": "boolean"},
+                stretchImage: {"type": "boolean"},
+                mirrorHorizontally: {"type": "boolean"}
+            }
         };
     }
 
