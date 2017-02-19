@@ -182,6 +182,8 @@ class EBNeuralNetworkImageComponent extends EBNeuralNetworkComponentBase
     generateInputStack(schema, inputNode)
     {
         const name = schema.variableName;
+        const configuration = schema.coniguration.interpretation;
+
 
         const size = EBNeuralNetworkImageComponent.getImageSizeForSchema(schema);
         let width = size.width;
@@ -273,6 +275,7 @@ class EBNeuralNetworkImageComponent extends EBNeuralNetworkComponentBase
             additionalModules: []
         };
     }
+
 
 
     /**
