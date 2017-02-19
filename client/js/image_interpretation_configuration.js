@@ -73,6 +73,16 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
                 "id": 3,
                 "title": "ReLu",
                 "layerType": "relu"
+            },
+            {
+                "id": 4,
+                "title": "BatchNormalization",
+                "layerType": "batchnormalization"
+            },
+            {
+                "id": 5,
+                "title": "Dropout",
+                "layerType": "dropout"
             }
         ];
     }

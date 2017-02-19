@@ -15,12 +15,128 @@
             <span class="fa" ng-class="{'fa-angle-down': !collapsed, 'fa-angle-right': collapsed}"></span>
         </a>
         {{node.title}}
+
+
     </div>
 
     <div ng-if="collapsed">
-        <div class="well well-lg">Some content</div>
-    </div>
+        <div class="well well-lg" ng-if="node.layerType == 'convolution'">
+            <div class="row">
 
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">nInputPlane</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">nOutputPlane</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">KernelWidth</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group"><label class="col-sm-1 control-label">KernelHeight</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group"><label class="col-sm-1 control-label">stepWidth</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">stepHeight</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group"><label class="col-sm-1 control-label">paddingWidth</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group"><label class="col-sm-1 control-label">paddingHeight</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="well well-lg" ng-if="node.layerType == 'maxpooling'">
+            <div class="row">
+
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">KernelWidth</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">KernelHeight</label>
+                    <div class="col-sm-2">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">stepWidth</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">stepHeight</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="well well-lg" ng-if="node.layerType == 'relu'">
+            <div class="row">
+
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">state</label>
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="well well-lg" ng-if="node.layerType == 'batchnormalization'">
+            <div class="row">
+
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">InputFeatures</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="well well-lg" ng-if="node.layerType == 'dropout'">
+            <div class="row">
+
+                <div class="form-group">
+                    <label class="col-sm-1 control-label">Ratio</label>
+                    <div class="col-sm-1">
+                        <input type="number" min="0" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 <div ui-tree id="tree-root">
     <ol ui-tree-nodes ng-model="data">
