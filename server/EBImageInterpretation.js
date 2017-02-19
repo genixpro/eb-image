@@ -217,17 +217,7 @@ class EBImageInterpretation extends EBInterpretationBase
 
             return Promise.fromCallback((next) =>
             {
-                imageObj.getBuffer(jimp.MIME_JPEG, function(err, buffer)
-                {
-                    if (err)
-                    {
-                        return next(err);
-                    }
-
-                    imageN += 1;
-                    fs.writeFileSync(`/home/bradley/cars/car-${imageN}.jpg`, buffer);
-                    return next(null, buffer);
-                });
+                imageObj.getBuffer(jimp.MIME_JPEG, next);
             }).then((buffer) =>
             {
                 return buffer.toString('base64');
