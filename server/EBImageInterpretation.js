@@ -215,6 +215,11 @@ class EBImageInterpretation extends EBInterpretationBase
                 imageObj.resize(100, 100);
             }
 
+            if (configuration.greyScale)
+            {
+                imageObj.greyscale();
+            }
+
             return Promise.fromCallback((next) =>
             {
                 imageObj.getBuffer(jimp.MIME_JPEG, next);
@@ -250,7 +255,8 @@ class EBImageInterpretation extends EBInterpretationBase
         return {
             rotateImage: true,
             stretchImage: true,
-            mirrorHorizontally: true
+            mirrorHorizontally: true,
+            greyScale: false
         };
     }
 
@@ -328,7 +334,8 @@ class EBImageInterpretation extends EBInterpretationBase
             "properties": {
                 rotateImage: {"type": "boolean"},
                 stretchImage: {"type": "boolean"},
-                mirrorHorizontally: {"type": "boolean"}
+                mirrorHorizontally: {"type": "boolean"},
+                greyScale: {"type": "boolean"}
             }
         };
     }
