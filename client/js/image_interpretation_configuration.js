@@ -21,14 +21,14 @@
 /**
  * Represents a single field being configured within the neural network
  */
-angular.module('eb').directive('ebImageInterpretationConfiguration', function ebImageInterpretationConfiguration($timeout, EBDataSourceService)
+angular.module('eb').directive('ebImageInterpretationConfiguration', function ebImageInterpretationConfiguration($timeout, EBDataSourceService, EBImageNetworkLayerTypes)
 {
     function controller($scope, $element, $attrs)
     {
         $scope.removeConvNetLayer = function(scope)
         {
-            console.log($scope.data.length);
-            if ($scope.data.length > 1)
+            console.log($scope.field.configuration.interpretation.layers.length);
+            if ($scope.field.configuration.interpretation.layers.length > 1)
             {
                 scope.remove();
             }
@@ -37,6 +37,16 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
         {
             scope.toggle();
         };
+        // $scope.addNewItem = function(conv)
+        // {
+        //     var layerData = conv;
+        //     var tempLayerData = {
+        //         "id": layerData.id,
+        //         "title": layerData.title,
+        //         "layerType": layerData.layerType
+        //     };
+        //     $scope.field.configuration.interpretation.layers.push(tempLayerData);
+        // };
         $scope.moveLastToTheBeginning = function ()
         {
             // var a = $scope.data.pop();
@@ -50,7 +60,7 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
                 "title": nodeData.title,
                 "layerType": nodeData.layerType
             };
-            $scope.data.push(tempData);
+            $scope.field.configuration.interpretation.layers.push(tempData);
         };
         $scope.collapseAll = function() {
             $scope.$broadcast('collapseAll');
@@ -58,33 +68,7 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
         $scope.expandAll = function() {
             $scope.$broadcast('expandAll');
         };
-        $scope.data = [
-            {
-                "id": 1,
-                "title": "Convolution",
-                "layerType": "convolution"
-            },
-            {
-                "id": 2,
-                "title": "MAxPooling",
-                "layerType": "maxpooling"
-            },
-            {
-                "id": 3,
-                "title": "ReLu",
-                "layerType": "relu"
-            },
-            {
-                "id": 4,
-                "title": "BatchNormalization",
-                "layerType": "batchnormalization"
-            },
-            {
-                "id": 5,
-                "title": "Dropout",
-                "layerType": "dropout"
-            }
-        ];
+
     }
 
     return {
