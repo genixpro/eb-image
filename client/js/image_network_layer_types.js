@@ -26,7 +26,7 @@ angular.module('eb').service('EBImageNetworkLayerTypes', function EBImageNetwork
     service.layerTypes = [
         {
             "id": 1,
-            "title": "Convolution",
+            "title": "SpatialConvolution",
             "layerType": "convolution",
             "nInputPlane": 3,
             "nOutputPlane": 32,
@@ -36,8 +36,38 @@ angular.module('eb').service('EBImageNetworkLayerTypes', function EBImageNetwork
             "stepHeight": 1,
             "paddingWidth": 1,
             "paddingHeight": 1
+        },
+        {
+            "id": 2,
+            "title": "SpatialBatchNormalization",
+            "layerType": "batchnormalization",
+            "nInputFeatures": 32
+
+        },
+        {
+            "id": 3,
+            "title": "ReLU",
+            "layerType": "relu",
+            "nState": true
+
+        },
+        {
+            "id": 4,
+            "title": "SpatialMaxPooling",
+            "layerType": "maxpooling",
+            "nKernelWidth": 2,
+            "nKernelHeight": 2,
+            "nStepWidth": 2,
+            "nStepHeight": 2
+
+        },
+        {
+            "id": 5,
+            "title": "Dropout",
+            "layerType": "dropout",
+            "nRatio": 0.4
         }
-    ]
+    ];
 
     return service;
 });

@@ -27,7 +27,7 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
     {
         $scope.removeConvNetLayer = function(scope)
         {
-            console.log($scope.field.configuration.interpretation.layers.length);
+            // console.log($scope.field.configuration.interpretation.layers.length);
             if ($scope.field.configuration.interpretation.layers.length > 1)
             {
                 scope.remove();
@@ -37,16 +37,14 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
         {
             scope.toggle();
         };
-        // $scope.addNewItem = function(conv)
-        // {
-        //     var layerData = conv;
-        //     var tempLayerData = {
-        //         "id": layerData.id,
-        //         "title": layerData.title,
-        //         "layerType": layerData.layerType
-        //     };
-        //     $scope.field.configuration.interpretation.layers.push(tempLayerData);
-        // };
+
+        $scope.layers = EBImageNetworkLayerTypes.layerTypes;
+
+        $scope.addNewLayers = function(newLayer)
+        {
+            $scope.field.configuration.interpretation.layers.push(_.clone(newLayer));
+        };
+
         $scope.moveLastToTheBeginning = function ()
         {
             // var a = $scope.data.pop();
