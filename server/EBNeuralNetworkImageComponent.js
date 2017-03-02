@@ -182,90 +182,52 @@ class EBNeuralNetworkImageComponent extends EBNeuralNetworkComponentBase
     generateInputStack(schema, inputNode)
     {
         const name = schema.variableName;
+        const Nconfiguration = schema.configuration.interpretation;
 
         const size = EBNeuralNetworkImageComponent.getImageSizeForSchema(schema);
         let width = size.width;
         let height = size.height;
+        let lastConvLayerKernelSize = null;
+        const torchModules = [];
+        Nconfiguration.layers.forEach(function(entry) {
+            if (entry.layerType === 'convolution')
+            {
+                const convModule = new EBTorchModule('nn.SpatialConvolution', [entry.nInputPlane, entry.nOutputPlane, entry.kernelWidth,entry.kernelHeight,entry.stepWidth,entry.stepHeight,entry.paddingWidth,entry.paddingHeight]);
+                // console.log(convModule);
+                torchModules.push(convModule);
+                lastConvLayerKernelSize = entry.nOutputPlane;
+            }
+            else if (entry.layerType === 'batchnormalization')
+            {
+                const batchNormal = new EBTorchModule('nn.SpatialBatchNormalization', [entry.nInputFeatures]);
+                torchModules.push(batchNormal);
+            }
+            else if (entry.layerType === 'relu')
+            {
+                const reluModule = new EBTorchModule('nn.ReLU', [entry.nState]);
+                torchModules.push(reluModule);
+            }
+            else if (entry.layerType === 'dropout')
+            {
+                const dropoutModule = new EBTorchModule('nn.Dropout', [entry.nRatio]);
+                torchModules.push(dropoutModule);
+            }
+            else if (entry.layerType === 'maxpooling')
+            {
+                const maxpoolModule = new EBTorchModule('nn.SpatialMaxPooling', [entry.nKernelWidth, entry.nKernelHeight, entry.nStepWidth,entry.nStepHeight]);
+                torchModules.push(maxpoolModule);
 
-        const layer1 = new EBTorchNode(new EBTorchModule("nn.Sequential", [], [
-            new EBTorchModule('nn.SpatialConvolution', [3, 32, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [32, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.SpatialConvolution', [32, 32, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [32, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.Dropout',[0.4]),
-            new EBTorchModule('nn.SpatialMaxPooling',[2,2,2,2])
-        ]), inputNode, `${name}_convNetLayer1`);
+                // Chop width and height in half after the pooling
+                width = Math.floor(width / 2);
+                height = Math.floor(height / 2);
+            }
+        });
 
-        // Chop width and height in half after the pooling
-        width = Math.floor(width / 2);
-        height = Math.floor(height / 2);
+        const convStack = new EBTorchNode(new EBTorchModule("nn.Sequential", [], torchModules), inputNode, `${name}_convStack`);
 
-        const layer2 = new EBTorchNode(new EBTorchModule("nn.Sequential", [], [
-            new EBTorchModule('nn.SpatialConvolution', [32, 64, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [64, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.SpatialConvolution', [64, 64, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [64, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.Dropout',[0.4]),
-            new EBTorchModule('nn.SpatialMaxPooling',[2,2,2,2])
-        ]), layer1, `${name}_convNetLayer2`);
+        const outputSize = lastConvLayerKernelSize * width * height;
 
-        // Chop width and height in half after the pooling
-        width = Math.floor(width / 2);
-        height = Math.floor(height / 2);
-
-        const layer3 = new EBTorchNode(new EBTorchModule("nn.Sequential", [], [
-            new EBTorchModule('nn.SpatialConvolution', [64, 128, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [128, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.SpatialConvolution', [128, 128, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [128, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.Dropout',[0.4]),
-            new EBTorchModule('nn.SpatialMaxPooling',[2,2,2,2])
-        ]), layer2, `${name}_convNetLayer3`);
-
-        // Chop width and height in half after the pooling
-        width = Math.floor(width / 2);
-        height = Math.floor(height / 2);
-
-        const layer4 = new EBTorchNode(new EBTorchModule("nn.Sequential", [], [
-            new EBTorchModule('nn.SpatialConvolution', [128, 256, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [256, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.SpatialConvolution', [256, 256, 3,3,1,1,1,1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [256, 1e-3]),
-            new EBTorchModule('nn.ReLU',['true']),
-            new EBTorchModule('nn.Dropout',[0.4]),
-            new EBTorchModule('nn.SpatialMaxPooling',[2,2,2,2])
-        ]), layer3, `${name}_convNetLayer4`);
-
-        // Chop width and height in half after the pooling
-        width = Math.floor(width / 2);
-        height = Math.floor(height / 2);
-
-        const layer5 = new EBTorchNode(new EBTorchModule("nn.Sequential", [], [
-            new EBTorchModule('nn.SpatialConvolution', [256, 512, 3, 3, 1, 1, 1, 1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [512, 1e-3]),
-            new EBTorchModule('nn.ReLU', ['true']),
-            new EBTorchModule('nn.SpatialConvolution', [512, 512, 3, 3, 1, 1, 1, 1]),
-            new EBTorchModule('nn.SpatialBatchNormalization', [512, 1e-3]),
-            new EBTorchModule('nn.ReLU', ['true']),
-            new EBTorchModule('nn.Dropout', [0.4]),
-            new EBTorchModule('nn.SpatialMaxPooling', [2, 2, 2, 2])
-        ]), layer4, `${name}_convNetLayer5`);
-
-
-        // Chop width and height in half after the pooling
-        width = Math.floor(width / 2);
-        height = Math.floor(height / 2);
-
-        const outputSize = 512 * width * height;
-
-        const reshape = new EBTorchNode(new EBTorchModule("nn.Reshape", [outputSize]), layer5, `${name}_reshape`);
+        const reshape = new EBTorchNode(new EBTorchModule("nn.Reshape", [outputSize]), convStack, `${name}_reshape`);
 
         return {
             outputNode: reshape,
@@ -273,6 +235,7 @@ class EBNeuralNetworkImageComponent extends EBNeuralNetworkComponentBase
             additionalModules: []
         };
     }
+
 
 
     /**

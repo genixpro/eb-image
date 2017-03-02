@@ -253,10 +253,132 @@ class EBImageInterpretation extends EBInterpretationBase
     generateDefaultConfiguration(schema)
     {
         return {
-            rotateImage: true,
-            stretchImage: true,
-            mirrorHorizontally: true,
-            greyScale: false
+            rotateImage: false,
+            stretchImage: false,
+            mirrorHorizontally: false,
+            greyScale: false,
+            layers: [
+                {
+                    "id": 1,
+                    "title": "Convolution",
+                    "layerType": "convolution",
+                    "nInputPlane": 3,
+                    "nOutputPlane": 32,
+                    "kernelWidth": 3,
+                    "kernelHeight": 3,
+                    "stepWidth": 1,
+                    "stepHeight": 1,
+                    "paddingWidth": 1,
+                    "paddingHeight": 1
+                },
+                {
+                    "id": 2,
+                    "title": "BatchNormalization",
+                    "layerType": "batchnormalization",
+                    "nInputFeatures": 32
+                },
+                {
+                    "id": 3,
+                    "title": "ReLu",
+                    "layerType": "relu",
+                    "nState": true
+                },
+                {
+                    "id": 4,
+                    "title": "Dropout",
+                    "layerType": "dropout",
+                    "nRatio": 0.4
+                },
+                {
+                    "id": 5,
+                    "title": "MaxPooling",
+                    "layerType": "maxpooling",
+                    "nKernelWidth":2,
+                    "nKernelHeight":2,
+                    "nStepWidth": 2,
+                    "nStepHeight": 2
+                },
+                {
+                    "id": 6,
+                    "title": "Convolution",
+                    "layerType": "convolution",
+                    "nInputPlane": 32,
+                    "nOutputPlane": 64,
+                    "kernelWidth": 3,
+                    "kernelHeight": 3,
+                    "stepWidth": 1,
+                    "stepHeight": 1,
+                    "paddingWidth": 1,
+                    "paddingHeight": 1
+                },
+                {
+                    "id": 7,
+                    "title": "BatchNormalization",
+                    "layerType": "batchnormalization",
+                    "nInputFeatures": 64
+                },
+                {
+                    "id": 8,
+                    "title": "ReLu",
+                    "layerType": "relu",
+                    "nState": true
+                },
+                {
+                    "id": 9,
+                    "title": "Dropout",
+                    "layerType": "dropout",
+                    "nRatio": 0.4
+                },
+                {
+                    "id": 10,
+                    "title": "MaxPooling",
+                    "layerType": "maxpooling",
+                    "nKernelWidth":2,
+                    "nKernelHeight":2,
+                    "nStepWidth": 2,
+                    "nStepHeight": 2
+                },
+                {
+                    "id": 11,
+                    "title": "Convolution",
+                    "layerType": "convolution",
+                    "nInputPlane": 64,
+                    "nOutputPlane": 128,
+                    "kernelWidth": 3,
+                    "kernelHeight": 3,
+                    "stepWidth": 1,
+                    "stepHeight": 1,
+                    "paddingWidth": 1,
+                    "paddingHeight": 1
+                },
+                {
+                    "id": 12,
+                    "title": "BatchNormalization",
+                    "layerType": "batchnormalization",
+                    "nInputFeatures": 128
+                },
+                {
+                    "id": 13,
+                    "title": "ReLu",
+                    "layerType": "relu",
+                    "nState": true
+                },
+                {
+                    "id": 14,
+                    "title": "Dropout",
+                    "layerType": "dropout",
+                    "nRatio": 0.4
+                },
+                {
+                    "id": 15,
+                    "title": "MaxPooling",
+                    "layerType": "maxpooling",
+                    "nKernelWidth":2,
+                    "nKernelHeight":2,
+                    "nStepWidth": 2,
+                    "nStepHeight": 2
+                }
+            ]
         };
     }
 
