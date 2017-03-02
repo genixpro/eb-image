@@ -66,7 +66,6 @@ angular.module('eb').directive('ebImageInterpretationConfiguration', function eb
         $scope.expandAll = function() {
             $scope.$broadcast('expandAll');
         };
-
     }
 
     return {

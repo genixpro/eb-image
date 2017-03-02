@@ -2,6 +2,8 @@
   "name": "eb-image",
   "description": "This plugin provides the number interpretation",
   "dependencies": {
-    "bluebird": "^3.4.6"
+    "bluebird": "^3.4.6",
+    "jimp": "^0.2.27",
+    "sharp": "^0.17.2"
   }
 }
