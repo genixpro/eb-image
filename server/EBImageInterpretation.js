@@ -143,7 +143,7 @@ class EBImageInterpretation extends EBInterpretationBase
         {
             return Promise.fromCallback((next) =>
             {
-                imageObj.contain(100,100).getBuffer(jimp.MIME_JPEG, next);
+                imageObj.contain(50,50).getBuffer(jimp.MIME_JPEG, next);
             }).then((buffer) =>
             {
                 return buffer.toString('base64');
